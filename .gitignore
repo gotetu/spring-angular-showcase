@@ -32,3 +32,6 @@ out/
 
 ### VS Code ###
 .vscode/
+
+### h2db ###
+server-h2db/
