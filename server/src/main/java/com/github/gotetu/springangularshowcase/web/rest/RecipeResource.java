@@ -15,6 +15,7 @@ public class RecipeResource {
     public RecipeResource(RecipeService service) {
         this.service = service;
     }
+    @CrossOrigin
     @PostMapping("/create")
     public ResponseEntity<Void> create(@RequestBody final Recipe recipe) {
         Recipe created = service.create(recipe);
@@ -22,17 +23,20 @@ public class RecipeResource {
                 URI.create("/api/v1/recipe/" + created.getId())
         ).build();
     }
+    @CrossOrigin
     @GetMapping("/{id}")
     public ResponseEntity<Recipe> get(@PathVariable final long id) {
         return service.findById(id)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
     }
+    @CrossOrigin
     @PutMapping("/save")
     public ResponseEntity<Void> save(@RequestBody final Recipe recipe) {
         service.save(recipe);
         return ResponseEntity.ok().build();
     }
+    @CrossOrigin
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> delete(
             @PathVariable final long id,

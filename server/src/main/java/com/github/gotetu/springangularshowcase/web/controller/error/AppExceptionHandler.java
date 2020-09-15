@@ -2,6 +2,7 @@ package com.github.gotetu.springangularshowcase.web.controller.error;
 
 import com.github.gotetu.springangularshowcase.service.common.ServiceException;
 import com.github.gotetu.springangularshowcase.service.common.ServiceMessage;
+import org.springframework.dao.OptimisticLockingFailureException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -32,4 +33,13 @@ public class AppExceptionHandler extends ResponseEntityExceptionHandler {
                 HttpStatus.INTERNAL_SERVER_ERROR,
                 request);
     }
-}
+    @ExceptionHandler(OptimisticLockingFailureException.class)
+    public ResponseEntity<Object> handleOptimisticLockingFailureException(
+            final OptimisticLockingFailureException ex, final WebRequest request) {
+        return super.handleExceptionInternal(
+                ex,
+                new ServiceMessage("error", "Optimistic error."),
+                null,
+                HttpStatus.BAD_REQUEST,
+                request);
+    }}
