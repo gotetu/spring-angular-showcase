@@ -2,6 +2,7 @@ package com.github.gotetu.springangularshowcase.web.rest;
 
 import com.github.gotetu.springangularshowcase.service.recipelist.RecipeListViewService;
 import com.github.gotetu.springangularshowcase.view.model.RecipeListView;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -18,7 +19,7 @@ public class RecipeListViewResource {
     public RecipeListViewResource(RecipeListViewService service) {
         this.service = service;
     }
-    @CrossOrigin
+    @ApiOperation(value="レシピ一覧を返します。", nickname="recipeListView_getAll")
     @GetMapping("")
     public ResponseEntity<List<RecipeListView>> getAll() {
         return ResponseEntity.ok(service.findAll());
