@@ -7,6 +7,8 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
 
+import javax.servlet.http.HttpServletResponse;
+
 @Configuration
 @EnableWebSecurity
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
@@ -14,11 +16,18 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http.csrf().csrfTokenRepository(
                 CookieCsrfTokenRepository.withHttpOnlyFalse())
+        .and()
+            .exceptionHandling()
+            .authenticationEntryPoint(((request, response, authException) -> {
+                response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+            }))
         .and().oauth2Login()
+            .defaultSuccessUrl("/",true)
         .and().authorizeRequests()
-        .mvcMatchers(HttpMethod.POST, "/api/**/*").authenticated()
-        .mvcMatchers(HttpMethod.PUT, "/api/**/*").authenticated()
-        .mvcMatchers(HttpMethod.DELETE, "/api/**/*").authenticated()
+            .mvcMatchers("/api/v1/ccount").authenticated()
+            .mvcMatchers(HttpMethod.POST, "/api/**/*").authenticated()
+            .mvcMatchers(HttpMethod.PUT, "/api/**/*").authenticated()
+            .mvcMatchers(HttpMethod.DELETE, "/api/**/*").authenticated()
         .anyRequest().permitAll();
     }
 }
